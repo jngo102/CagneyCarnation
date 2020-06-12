@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CagneyCarnation", "CagneyCarnation\CagneyCarnation.csproj", "{BD951883-71E4-4CC1-9B02-3689E8BE574D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD951883-71E4-4CC1-9B02-3689E8BE574D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD951883-71E4-4CC1-9B02-3689E8BE574D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD951883-71E4-4CC1-9B02-3689E8BE574D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD951883-71E4-4CC1-9B02-3689E8BE574D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
