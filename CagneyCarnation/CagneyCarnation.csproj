@@ -77,6 +77,14 @@
     <EmbeddedResource Include="Assets\arenawin" />
     <EmbeddedResource Include="Assets\flowerwin" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\flowerlin" />
+    <EmbeddedResource Include="Assets\flowermac" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\arenalin" />
+    <EmbeddedResource Include="Assets\arenamac" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="@echo on" />

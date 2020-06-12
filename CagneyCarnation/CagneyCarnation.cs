@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using HutongGames.PlayMaker.Actions;
-using ModCommon;
-using ModCommon.Util;
 using Modding;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
+using uObject = UnityEngine.Object;
 
 namespace CagneyCarnation
 {
@@ -54,7 +50,6 @@ namespace CagneyCarnation
 
             Instance = this;
 
-            GetResources();
             LoadAssets();
 
             Unload();
@@ -103,19 +98,6 @@ namespace CagneyCarnation
             
             return obj;
         }
-        
-        private void GetResources()
-        {
-            Assembly asm = Assembly.GetExecutingAssembly();
-            foreach (string res in asm.GetManifestResourceNames())
-            {
-                using (Stream s = asm.GetManifestResourceStream(res))
-                {
-                    string bundleName = Path.GetExtension(res).Substring(1);
-                    Bundles[bundleName] = AssetBundle.LoadFromStream(s);
-                }
-            }
-        }
 
         private void LoadAssets()
         {
@@ -123,12 +105,15 @@ namespace CagneyCarnation
             switch (SystemInfo.operatingSystemFamily)
             {
                 case OperatingSystemFamily.Windows:
+                    ArenaAssetsPath = "arenawin";
                     flowerAssetsPath = "flowerwin";
                     break;
                 case OperatingSystemFamily.Linux:
+                    ArenaAssetsPath = "arenalin";
                     flowerAssetsPath = "flowerlin";
                     break;
                 case OperatingSystemFamily.MacOSX:
+                    ArenaAssetsPath = "arenamac";
                     flowerAssetsPath = "flowermac";
                     break;
                 default:
@@ -136,20 +121,21 @@ namespace CagneyCarnation
                     return;
             }
             
-            switch (SystemInfo.operatingSystemFamily)
+            Assembly asm = Assembly.GetExecutingAssembly();
+            foreach (string res in asm.GetManifestResourceNames())
             {
-                case OperatingSystemFamily.Windows:
-                    ArenaAssetsPath = "arenawin";
-                    break;
-                case OperatingSystemFamily.Linux:
-                    ArenaAssetsPath = "arenalin";
-                    break;
-                case OperatingSystemFamily.MacOSX:
-                    ArenaAssetsPath = "arenamac";
-                    break;
-                default:
-                    Log("ERROR UNSUPPORTED SYSTEM: " + SystemInfo.operatingSystemFamily);
-                    return;
+                using (Stream s = asm.GetManifestResourceStream(res))
+                {
+                    if (s == null) continue;
+                    byte[] buffer = new byte[s.Length];
+                    s.Read(buffer, 0, buffer.Length);
+                    s.Dispose();
+                    
+                    string bundleName = Path.GetExtension(res).Substring(1);
+                    if (bundleName != flowerAssetsPath && bundleName != ArenaAssetsPath) continue;
+                    Log("Loading bundle: " + bundleName);
+                    Bundles[bundleName] = AssetBundle.LoadFromMemory(buffer);
+                }
             }
 
             AssetBundle flowerBundle = Bundles[flowerAssetsPath];
@@ -172,7 +158,7 @@ namespace CagneyCarnation
                 return;
             }
             
-            Object.Destroy(finder);
+            uObject.Destroy(finder);
         }
     }
 }

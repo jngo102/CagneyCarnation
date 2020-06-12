@@ -26,6 +26,7 @@ namespace CagneyCarnation
             _he = gameObject.AddComponent<EnemyHitEffectsUninfected>();
             _hm = gameObject.AddComponent<HealthManager>();
             _sf = gameObject.AddComponent<SpriteFlash>();
+            _sf.enabled = true;
             gameObject.AddComponent<NonBouncer>();
 
             _hornet = CagneyCarnation.GameObjects["Hornet"];

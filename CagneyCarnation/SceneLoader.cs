@@ -7,7 +7,6 @@ namespace CagneyCarnation
     public class SceneLoader : MonoBehaviour
     {
         private AssetBundle _bundle;
-        private string _sceneName;
 
         public static GameObject SceneController;
         
@@ -33,7 +32,6 @@ namespace CagneyCarnation
                 
                 HeroController.instance.heroLight.sprite = null;
                 HeroController.instance.vignette.sprite = null;
-                _sceneName = "FloralFury";
 
                 GameObject scenery = GameObject.Find("_Scenery");
                 foreach (SpriteRenderer sr in scenery.GetComponentsInChildren<SpriteRenderer>(true))
@@ -76,7 +74,6 @@ namespace CagneyCarnation
                 On.HeroController.CanWallJump -= DisableWallJump;
                 On.HeroController.CanWallSlide -= DisableWallSlide;
                 
-                _sceneName = "GG_Workshop";
                 orig(gm, false);
                 
                 return;
