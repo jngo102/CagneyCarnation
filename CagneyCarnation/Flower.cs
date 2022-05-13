@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HutongGames.PlayMaker.Actions;
-using ModCommon;
-using ModCommon.Util;
 using UnityEngine;
-
+using Vasi;
+using Modding;
 namespace CagneyCarnation
 {
     public class Flower : MonoBehaviour
@@ -89,11 +88,11 @@ namespace CagneyCarnation
             chomper.LocateMyFSM("FSM").Fsm.GetFsmGameObject("Audio Player").Value = audioPlayer;
             chomper.AddComponent<Chomper>();
             
-            _control.InsertMethod("Phase Check", 0, () => _control.Fsm.GetFsmInt("HP").Value = _hm.hp);
-            _control.InsertMethod("Lunging Bottom", 0, () => _nb.active = false);
-            _control.InsertMethod("Lunge Bottom End", 0, () => _nb.active = true);
-            _control.InsertCoroutine("GG Return", 0, DoDreamReturn);
-            _control.InsertMethod("Death", 0, () => PlayerData.instance.isInvincible = true);
+            _control.GetState("Phase Check").InsertMethod( 0, () => _control.Fsm.GetFsmInt("HP").Value = _hm.hp);
+            _control.GetState("Lunging Bottom").InsertMethod( 0, () => _nb.active = false);
+            _control.GetState("Lunge Bottom End").InsertMethod(0, () => _nb.active = true);
+            _control.GetState("GG Return").InsertCoroutine( 0, DoDreamReturn);
+            _control.GetState("Death").InsertMethod(0, () => PlayerData.instance.isInvincible = true);
 
             _control.GetAction<RandomWait>("Dancing", 3).min = ArenaFinder.BossLevel > 0 ? 0.75f : 1.75f;
             _control.GetAction<RandomWait>("Dancing", 3).max = ArenaFinder.BossLevel > 0 ? 1f : 2f;
@@ -146,9 +145,9 @@ namespace CagneyCarnation
             MusicCue musicCue = ScriptableObject.CreateInstance<MusicCue>();
             List<MusicCue.MusicChannelInfo> channelInfos = new List<MusicCue.MusicChannelInfo>();
             MusicCue.MusicChannelInfo channelInfo = new MusicCue.MusicChannelInfo();
-            channelInfo.SetAttr("clip", CagneyCarnation.Music);
+            ReflectionHelper.SetField(channelInfo, "clip", CagneyCarnation.Music);
             channelInfos.Add(channelInfo);
-            musicCue.SetAttr("channelInfos", channelInfos.ToArray());
+            ReflectionHelper.SetField(musicCue, "channelInfos", channelInfos.ToArray());
             GameManager.instance.AudioManager.ApplyMusicCue(musicCue, 0, 0, false);
         }
 

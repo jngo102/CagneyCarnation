@@ -8,7 +8,7 @@ using uObject = UnityEngine.Object;
 
 namespace CagneyCarnation
 {
-    public class CagneyCarnation : Mod, ITogglableMod
+    public class CagneyCarnation : Mod, ITogglableMod,ILocalSettings<SaveSettings>
     {
         public static CagneyCarnation Instance;
         
@@ -19,13 +19,10 @@ namespace CagneyCarnation
         
         public static AudioClip Music;
         
-        public override ModSettings SaveSettings
-        {
-            get => _settings;
-            set => _settings = value as SaveSettings ?? _settings;
-        }
-
-        private SaveSettings _settings = new SaveSettings();
+      
+        public static SaveSettings _settings = new SaveSettings();
+        public void OnLoadLocal(SaveSettings s) => _settings = s;
+        public SaveSettings OnSaveLocal() => _settings;
         
         public override string GetVersion()
         {
@@ -54,11 +51,11 @@ namespace CagneyCarnation
 
             Unload();
             
-            ModHooks.Instance.AfterSavegameLoadHook += AfterSaveGameLoad;
-            ModHooks.Instance.GetPlayerVariableHook += GetVariableHook;
-            ModHooks.Instance.LanguageGetHook += LangGet;
-            ModHooks.Instance.NewGameHook += AddComponent;
-            ModHooks.Instance.SetPlayerVariableHook += SetVariableHook;
+            ModHooks.AfterSavegameLoadHook += AfterSaveGameLoad;
+            ModHooks.GetPlayerVariableHook += GetVariableHook;
+            ModHooks.LanguageGetHook += LangGet;
+            ModHooks.NewGameHook += AddComponent;
+            ModHooks.SetPlayerVariableHook += SetVariableHook;
         }
 
         private void AfterSaveGameLoad(SaveGameData data) => AddComponent();
@@ -73,13 +70,13 @@ namespace CagneyCarnation
             return orig;
         }
         
-        private string LangGet(string key, string sheettitle)
+        private string LangGet(string key, string sheettitle,string orig)
         {
             switch (key)
             {
                 case "FLOWER_NAME": return "Cagney Carnation";
                 case "FLOWER_DESC": return "Hostile god of the meadow.";
-                default: return Language.Language.GetInternal(key, sheettitle);
+                default: return orig;
             }
         }
         
@@ -146,11 +143,11 @@ namespace CagneyCarnation
         
         public void Unload()
         {
-            ModHooks.Instance.AfterSavegameLoadHook -= AfterSaveGameLoad;
-            ModHooks.Instance.GetPlayerVariableHook -= GetVariableHook;
-            ModHooks.Instance.LanguageGetHook -= LangGet;
-            ModHooks.Instance.SetPlayerVariableHook -= SetVariableHook;
-            ModHooks.Instance.NewGameHook -= AddComponent;
+            ModHooks.AfterSavegameLoadHook -= AfterSaveGameLoad;
+            ModHooks.GetPlayerVariableHook -= GetVariableHook;
+            ModHooks.LanguageGetHook -= LangGet;
+            ModHooks.SetPlayerVariableHook -= SetVariableHook;
+            ModHooks.NewGameHook -= AddComponent;
 
             var finder = GameManager.instance?.gameObject.GetComponent<ArenaFinder>();
             if (finder == null)
