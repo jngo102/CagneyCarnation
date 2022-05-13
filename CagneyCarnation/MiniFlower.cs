@@ -1,8 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
-using ModCommon.Util;
 using UnityEngine;
-
+using Vasi;
 namespace CagneyCarnation
 {
     public class MiniFlower : MonoBehaviour
@@ -40,12 +39,12 @@ namespace CagneyCarnation
 
         private void Start()
         {
-            _movement.InsertMethod("Tween Up", 0, () => _hm.IsInvincible = true);
+            _movement.GetState("Tween Up").InsertMethod( 0, () => _hm.IsInvincible = true);
             
             _shootControl.Fsm.GetFsmGameObject("Hero").Value = HeroController.instance.gameObject;
             
-            _shootControl.InsertMethod("Wait", 0, () => _hm.IsInvincible = true);
-            _shootControl.InsertMethod("Open", 0, () => _hm.IsInvincible = false);
+            _shootControl.GetState("Wait").InsertMethod( 0, () => _hm.IsInvincible = true);
+            _shootControl.GetState("Open").InsertMethod( 0, () => _hm.IsInvincible = false);
 
             _hm.hp = ArenaFinder.BossLevel > 0 ? AscHP : AttHP;
             _hm.hasSpecialDeath = true;
